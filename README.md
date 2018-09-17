@@ -18,6 +18,14 @@ https://www.youtube.com/playlist?list=PLuK0q1zy2dBwA6dK5rYjmJSXw2_4_zvDJ
 
 ## <a name="parte1">00  JSP,  Servlets e JSTL   Preparando o ambiente</a>
 
+Checklist
+- Criar minha unidade de persistência
+- Configurar minha classe de conexão
+    - O nome da unidade de persistência deve ser o mesmo que foi criado
+- Verificar se estou com o driver JDBC do PostgreSQL referenciado no projeto.
+- gerar as classes de modelo.
+
+
 
 [Voltar ao Índice](#indice)
 

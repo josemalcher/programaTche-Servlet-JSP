@@ -107,12 +107,12 @@ target/
 # Created by https://www.gitignore.io/api/netbeans
 
 ### NetBeans ###
-programaTche-CrudJPA/nbproject/private/
-programaTche-CrudJPA/build/
-programaTche-CrudJPA/nbbuild/
-programaTche-CrudJPA/dist/
-programaTche-CrudJPA/nbdist/
-programaTche-CrudJPA/.nb-gradle/
+Limpo/nbproject/private/
+Limpo/build/
+Limpo/nbbuild/
+Limpo/dist/
+Limpo/nbdist/
+Limpo/.nb-gradle/
 
 
 # End of https://www.gitignore.io/api/netbeans
