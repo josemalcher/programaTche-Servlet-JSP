@@ -1,4 +1,5 @@
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../cabecalho.jsp" %>
 
 
@@ -54,7 +55,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+                    <c:forEach items="${lista}" var="obj">
+                        <tr>
+                        <td><c:out value="${obj.numSerie}" /></td>
+                        <td><c:out value="${obj.nome}" /></td>
+                        <td><c:out value="${obj.marca}" /></td>
+                        <td><c:out value="${obj.valor}" /></td>
+                        <td><a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
+                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
+                        </td>
+                    </tr>
+                    </c:forEach> 
+<!--                   
                     <tr>
                         <td>999999</td>
                         <td>XXXXXXXXXXX</td>
@@ -64,7 +76,7 @@
                             <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
                         </td>
                     </tr>
-                    
+                    -->
                 </tbody>
             </table>
            
