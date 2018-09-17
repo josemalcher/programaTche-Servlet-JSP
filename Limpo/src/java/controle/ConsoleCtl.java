@@ -45,6 +45,22 @@ public class ConsoleCtl extends HttpServlet {
                 dao = new ConsoleDAO();
                 List<Console> lista = dao.listar();
                 request.setAttribute("lista", lista);
+                dao.fecharEmf();
+                break;
+            case "del":
+                dao = new ConsoleDAO();
+                String id= request.getParameter("id");
+                Boolean deuCerto = dao.excluir(Integer.parseInt(id));
+                String msgE;
+                if(deuCerto){
+                    msgE = "<script>alert('Registro excluído');</script>";
+                }else{
+                    msgE = "<script>alert('Objeto Não pode ser Excluído, Verifique Dependências!');</script>";
+                }
+                List<Console> listaE = dao.listar();
+                request.setAttribute("lista", listaE);
+                request.setAttribute("msgE", msgE);
+                dao.fecharEmf();
                 break;
         }
         RequestDispatcher destino = request.getRequestDispatcher("index.jsp"); 
@@ -89,7 +105,7 @@ public class ConsoleCtl extends HttpServlet {
         request.setAttribute("msg", msg); 
                 
         // manda para pagina destino
-        RequestDispatcher destino = request.getRequestDispatcher("pagina"); 
+        RequestDispatcher destino = request.getRequestDispatcher(pagina); 
         destino.forward(request, response);       
         
     }

@@ -25,7 +25,7 @@
     <div class="panel panel-default">
 
         <div class="panel-body">
-
+        ${msgE}        
             <a  href="add.jsp" class="btn  btn-primary btn-sm fa fa-plus-square-o" >Novo</a>
             
         </div>
@@ -61,12 +61,14 @@
                         <td><c:out value="${obj.nome}" /></td>
                         <td><c:out value="${obj.marca}" /></td>
                         <td><c:out value="${obj.valor}" /></td>-->
-                        <td>${obj.numSerie}"</td>
-                        <td>${obj.nome}" </td>
-                        <td>${obj.marca}"</td>
-                        <td>${obj.valor}"</td>
-                        <td><a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
-                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
+                        <td>${obj.numSerie}</td>
+                        <td>${obj.nome}</td>
+                        <td>${obj.marca}</td>
+                        <td>${obj.valor}</td>
+                        <td>
+                            <a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
+                            <a href="ConsoleCtl?action=del&id=${obj.numSerie}" class="btn  btn-danger btn-sm">Excluir</a>
+<!--                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  -->
                         </td>
                     </tr>
                     </c:forEach> 

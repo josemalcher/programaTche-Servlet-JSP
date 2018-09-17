@@ -144,15 +144,15 @@ public class ConsoleDAO extends GenericDAO<Console, Integer>{
                         <td><c:out value="${obj.nome}" /></td>
                         <td><c:out value="${obj.marca}" /></td>
                         <td><c:out value="${obj.valor}" /></td>-->
-                        <td>${obj.numSerie}"</td>
-                        <td>${obj.nome}" </td>
-                        <td>${obj.marca}"</td>
-                        <td>${obj.valor}"</td>
+                        <td>${obj.numSerie}</td>
+                        <td>${obj.nome}</td>
+                        <td>${obj.marca}</td>
+                        <td>${obj.valor}</td>
                         <td><a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
                             <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
                         </td>
                     </tr>
-                    </c:forEach> 
+                    </c:forEach>
 <!--                   
                     <tr>
                         <td>999999</td>
@@ -293,6 +293,47 @@ public class ConsoleCtl extends HttpServlet {
 ---
 
 ## <a name="parte4">03  JSP, Servlets e JSTL   Excluir</a>
+
+```java
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String acao = request.getParameter("action");
+        ConsoleDAO dao;
+        switch(acao){
+            case "list":
+                dao = new ConsoleDAO();
+                List<Console> lista = dao.listar();
+                request.setAttribute("lista", lista);
+                dao.fecharEmf();
+                break;
+            case "del":
+                dao = new ConsoleDAO();
+                String id= request.getParameter("id");
+                Boolean deuCerto = dao.excluir(Integer.parseInt(id));
+                String msgE;
+                if(deuCerto){
+                    msgE = "<script>alert('Registro excluído');</script>";
+                }else{
+                    msgE = "<script>alert('Objeto Não pode ser Excluído, Verifique Dependências!');</script>";
+                }
+                List<Console> listaE = dao.listar();
+                request.setAttribute("lista", listaE);
+                request.setAttribute("msgE", msgE);
+                dao.fecharEmf();
+                break;
+        }
+        RequestDispatcher destino = request.getRequestDispatcher("index.jsp"); 
+        destino.forward(request, response);
+    }
+
+
+```
+
+```jsp
+<a href="ConsoleCtl?action=del&id=${obj.numSerie}" class="btn  btn-danger btn-sm">Excluir</a>
+```
 
 
 [Voltar ao Índice](#indice)
