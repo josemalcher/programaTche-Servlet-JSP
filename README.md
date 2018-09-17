@@ -138,12 +138,16 @@ public class ConsoleDAO extends GenericDAO<Console, Integer>{
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${lista}" var="obj">
+                   <c:forEach items="${lista}" var="obj">
                         <tr>
-                        <td><c:out value="${obj.numSerie}" /></td>
+<!--                        <td><c:out value="${obj.numSerie}" /></td>
                         <td><c:out value="${obj.nome}" /></td>
                         <td><c:out value="${obj.marca}" /></td>
-                        <td><c:out value="${obj.valor}" /></td>
+                        <td><c:out value="${obj.valor}" /></td>-->
+                        <td>${obj.numSerie}"</td>
+                        <td>${obj.nome}" </td>
+                        <td>${obj.marca}"</td>
+                        <td>${obj.valor}"</td>
                         <td><a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
                             <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
                         </td>
@@ -173,6 +177,115 @@ public class ConsoleDAO extends GenericDAO<Console, Integer>{
 ---
 
 ## <a name="parte3">02   JSP, Servlets e JSTL   Adicionar</a>
+
+```java
+package controle;
+import dao.ConsoleDAO;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import modelo.Console;
+/**
+ *
+ * @author josemalcher
+ */
+@WebServlet(name = "ConsoleCtl", urlPatterns = {"/console/ConsoleCtl"})
+public class ConsoleCtl extends HttpServlet {
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String acao = request.getParameter("action");
+        ConsoleDAO dao;
+        switch(acao){
+            case "list":
+                dao = new ConsoleDAO();
+                List<Console> lista = dao.listar();
+                request.setAttribute("lista", lista);
+                break;
+        }
+        RequestDispatcher destino = request.getRequestDispatcher("index.jsp"); 
+        destino.forward(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String pagina;
+        String msg;
+        
+        // pegar as informações do form
+        String nome = request.getParameter("txtNome");
+        String marcar = request.getParameter("txtMarca");
+        BigDecimal valor = new BigDecimal(request.getParameter("txtValor"));
+        
+        // monto o objeto
+        Console obj = new Console();
+        obj.setNome(nome);
+        obj.setMarca(marcar);
+        obj.setValor(valor);
+        
+        //grava no bd
+        ConsoleDAO dao = new ConsoleDAO();
+        
+        Boolean deuCerto = dao.incluir(obj);
+        if(deuCerto){
+            msg = "Operação realizada com sucesso";
+        }else{
+            msg = "Operação FALHOU!";
+        }
+        pagina = "add.jsp";
+        request.setAttribute("msg", msg); 
+                
+        // manda para pagina destino
+        RequestDispatcher destino = request.getRequestDispatcher("pagina"); 
+        destino.forward(request, response);       
+        
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
+
+```
+
+```jsp
+ <div class="alert ">
+    ${msg}
+ </div>
+```
+
 
 
 [Voltar ao Índice](#indice)

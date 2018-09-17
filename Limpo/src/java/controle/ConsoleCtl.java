@@ -7,6 +7,7 @@ package controle;
 
 import dao.ConsoleDAO;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,7 +62,35 @@ public class ConsoleCtl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String pagina;
+        String msg;
         
+        // pegar as informações do form
+        String nome = request.getParameter("txtNome");
+        String marcar = request.getParameter("txtMarca");
+        BigDecimal valor = new BigDecimal(request.getParameter("txtValor"));
+        
+        // monto o objeto
+        Console obj = new Console();
+        obj.setNome(nome);
+        obj.setMarca(marcar);
+        obj.setValor(valor);
+        
+        //grava no bd
+        ConsoleDAO dao = new ConsoleDAO();
+        
+        Boolean deuCerto = dao.incluir(obj);
+        if(deuCerto){
+            msg = "Operação realizada com sucesso";
+        }else{
+            msg = "Operação FALHOU!";
+        }
+        pagina = "add.jsp";
+        request.setAttribute("msg", msg); 
+                
+        // manda para pagina destino
+        RequestDispatcher destino = request.getRequestDispatcher("pagina"); 
+        destino.forward(request, response);       
         
     }
 

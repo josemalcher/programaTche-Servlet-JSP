@@ -27,9 +27,9 @@
         <div class="panel-body">
 
             <div class="alert ">
-                
+                ${msg}
             </div>
-            <form action="#" method="post">
+            <form action="ConsoleCtl" method="post">
 
                 <div class="col-lg-6">
 

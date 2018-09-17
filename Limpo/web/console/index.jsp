@@ -57,10 +57,14 @@
                 <tbody>
                     <c:forEach items="${lista}" var="obj">
                         <tr>
-                        <td><c:out value="${obj.numSerie}" /></td>
+<!--                        <td><c:out value="${obj.numSerie}" /></td>
                         <td><c:out value="${obj.nome}" /></td>
                         <td><c:out value="${obj.marca}" /></td>
-                        <td><c:out value="${obj.valor}" /></td>
+                        <td><c:out value="${obj.valor}" /></td>-->
+                        <td>${obj.numSerie}"</td>
+                        <td>${obj.nome}" </td>
+                        <td>${obj.marca}"</td>
+                        <td>${obj.valor}"</td>
                         <td><a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
                             <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  
                         </td>
