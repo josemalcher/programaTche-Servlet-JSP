@@ -342,6 +342,223 @@ public class ConsoleCtl extends HttpServlet {
 
 ## <a name="parte5">04   JSP, Servlets e JSTL   Alterar</a>
 
+```java
+package controle;
+import dao.ConsoleDAO;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import modelo.Console;
+/**
+ *
+ * @author josemalcher
+ */
+@WebServlet(name = "ConsoleCtl", urlPatterns = {"/console/ConsoleCtl"})
+public class ConsoleCtl extends HttpServlet {
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String acao = request.getParameter("action");
+        ConsoleDAO dao;
+        
+        String pagina = "index.jsp";
+        switch(acao){
+            case "list":
+                dao = new ConsoleDAO();
+                List<Console> lista = dao.listar();
+                request.setAttribute("lista", lista);
+                dao.fecharEmf();
+                pagina = "index.jsp";
+                break;
+            case "del":
+                dao = new ConsoleDAO();
+                String id= request.getParameter("id");
+                Boolean deuCerto = dao.excluir(Integer.parseInt(id));
+                String msgE;
+                if(deuCerto){
+                    msgE = "<script>alert('Registro excluído');</script>";
+                }else{
+                    msgE = "<script>alert('Objeto Não pode ser Excluído, Verifique Dependências!');</script>";
+                }
+                List<Console> listaE = dao.listar();
+                request.setAttribute("lista", listaE);
+                request.setAttribute("msgE", msgE);
+                dao.fecharEmf();
+                pagina = "index.jsp";
+                break;
+            case "updade":
+                dao = new ConsoleDAO();
+                String idUpdate= request.getParameter("id");
+                
+                // busco o reguistro que eu quero exibir
+                Console obj = dao.buscarPorChavePrimaria(Integer.parseInt(idUpdate));
+                
+                request.setAttribute("obj", obj);
+                
+                pagina = "upd.jsp";
+                break;
+        }
+        RequestDispatcher destino = request.getRequestDispatcher(pagina); 
+        destino.forward(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String pagina;
+        String msg;
+        
+        // pegar as informações do form
+        String nome = request.getParameter("txtNome");
+        String marcar = request.getParameter("txtMarca");
+        BigDecimal valor = new BigDecimal(request.getParameter("txtValor"));
+        
+        // monto o objeto
+        Console obj = new Console();
+        obj.setNome(nome);
+        obj.setMarca(marcar);
+        obj.setValor(valor);
+        
+        //grava no bd
+        ConsoleDAO dao = new ConsoleDAO();
+        
+        Boolean deuCerto;
+        
+        if(request.getParameter("txtNumSerie") == null){
+            deuCerto = dao.incluir(obj);
+            pagina = "add.jsp";
+        }else{
+            String numSerie = request.getParameter("txtNumSerie");
+            obj.setNumSerie(Integer.parseInt(numSerie));
+            deuCerto = dao.alterar(obj);
+            pagina = "upd.jsp";
+        }
+        
+        
+        if(deuCerto){
+            msg = "Operação realizada com sucesso";
+        }else{
+            msg = "Operação FALHOU!";
+        }
+        
+        request.setAttribute("msg", msg); 
+                
+        // manda para pagina destino
+        RequestDispatcher destino = request.getRequestDispatcher(pagina); 
+        destino.forward(request, response);       
+        
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
+
+```
+
+```jsp
+
+<%@include file="../cabecalho.jsp" %>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Sistema de Comércio Eletrônico
+            <small>Admin</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i>  <a href="index.jsp">Área Administrativa</a>
+            </li>
+            <li class="active">
+                <i class="fa fa-file"></i> Aqui vai o conteúdo de apresentação
+            </li>
+        </ol>
+    </div>
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Console
+        </div>
+        <div class="panel-body">
+
+            <div class="alert ">
+                ${msg}
+            </div>
+            <form action="ConsoleCtl" method="post">
+                
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+                        <label>Número de Série</label>
+                        <input class="form-control" type="text" name="txtNumSerie" readonly value="${obj.getNumSerie()}"/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input class="form-control" type="text" name="txtNome" required value="${obj.getNome()}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input class="form-control" type="text" name="txtMarca" required value="${obj.getMarca()}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input class="form-control" type="number" name="txtValor" required value="${obj.getValor()}" />
+                    </div>
+
+
+                <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+                
+            </form>
+
+        </div>
+
+
+    </div>
+</div>
+<!-- /.row -->
+<%@include file="../rodape.jsp" %>
+
+```
+
+```jsp
+<a href="ConsoleCtl?action=updade&id=${obj.numSerie}" class="btn  btn-primary btn-sm">Alterar</a>
+```
+
 
 [Voltar ao Índice](#indice)
 

@@ -66,7 +66,7 @@
                         <td>${obj.marca}</td>
                         <td>${obj.valor}</td>
                         <td>
-                            <a href="upd.jsp?id=" class="btn  btn-primary btn-sm">Alterar</a>
+                            <a href="ConsoleCtl?action=updade&id=${obj.numSerie}" class="btn  btn-primary btn-sm">Alterar</a>
                             <a href="ConsoleCtl?action=del&id=${obj.numSerie}" class="btn  btn-danger btn-sm">Excluir</a>
 <!--                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=">Excluir</button>  -->
                         </td>

@@ -26,28 +26,28 @@
         <div class="panel-body">
 
             <div class="alert ">
-                
+                ${msg}
             </div>
-            <form action="#" method="post">
+            <form action="ConsoleCtl" method="post">
                 
                 <div class="col-lg-6">
 
                     <div class="form-group">
-                        <label>Código</label>
-                        <input class="form-control" type="text" name="txtCodigo" readonly value="<%=obj.getNumSerie()%>"/>
+                        <label>Número de Série</label>
+                        <input class="form-control" type="text" name="txtNumSerie" readonly value="${obj.getNumSerie()}"/>
                     </div>
                     
                     <div class="form-group">
                         <label>Nome</label>
-                        <input class="form-control" type="text" name="txtNome" required value="<%=obj.getNome() %>" />
+                        <input class="form-control" type="text" name="txtNome" required value="${obj.getNome()}" />
                     </div>
                     <div class="form-group">
                         <label>Marca</label>
-                        <input class="form-control" type="text" name="txtMarca" required value="<%=obj.getMarca()%>" />
+                        <input class="form-control" type="text" name="txtMarca" required value="${obj.getMarca()}" />
                     </div>
                     <div class="form-group">
                         <label>Valor</label>
-                        <input class="form-control" type="number" name="txtValor" required value="<%=obj.getValor()%>" />
+                        <input class="form-control" type="number" name="txtValor" required value="${obj.getValor()}" />
                     </div>
 
 

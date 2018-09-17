@@ -39,13 +39,14 @@ public class ConsoleCtl extends HttpServlet {
         String acao = request.getParameter("action");
         ConsoleDAO dao;
         
-        
+        String pagina = "index.jsp";
         switch(acao){
             case "list":
                 dao = new ConsoleDAO();
                 List<Console> lista = dao.listar();
                 request.setAttribute("lista", lista);
                 dao.fecharEmf();
+                pagina = "index.jsp";
                 break;
             case "del":
                 dao = new ConsoleDAO();
@@ -61,9 +62,21 @@ public class ConsoleCtl extends HttpServlet {
                 request.setAttribute("lista", listaE);
                 request.setAttribute("msgE", msgE);
                 dao.fecharEmf();
+                pagina = "index.jsp";
+                break;
+            case "updade":
+                dao = new ConsoleDAO();
+                String idUpdate= request.getParameter("id");
+                
+                // busco o reguistro que eu quero exibir
+                Console obj = dao.buscarPorChavePrimaria(Integer.parseInt(idUpdate));
+                
+                request.setAttribute("obj", obj);
+                
+                pagina = "upd.jsp";
                 break;
         }
-        RequestDispatcher destino = request.getRequestDispatcher("index.jsp"); 
+        RequestDispatcher destino = request.getRequestDispatcher(pagina); 
         destino.forward(request, response);
     }
 
@@ -95,13 +108,25 @@ public class ConsoleCtl extends HttpServlet {
         //grava no bd
         ConsoleDAO dao = new ConsoleDAO();
         
-        Boolean deuCerto = dao.incluir(obj);
+        Boolean deuCerto;
+        
+        if(request.getParameter("txtNumSerie") == null){
+            deuCerto = dao.incluir(obj);
+            pagina = "add.jsp";
+        }else{
+            String numSerie = request.getParameter("txtNumSerie");
+            obj.setNumSerie(Integer.parseInt(numSerie));
+            deuCerto = dao.alterar(obj);
+            pagina = "upd.jsp";
+        }
+        
+        
         if(deuCerto){
             msg = "Operação realizada com sucesso";
         }else{
             msg = "Operação FALHOU!";
         }
-        pagina = "add.jsp";
+        
         request.setAttribute("msg", msg); 
                 
         // manda para pagina destino
