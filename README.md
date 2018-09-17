@@ -566,6 +566,90 @@ public class ConsoleCtl extends HttpServlet {
 
 ## <a name="parte6">05   JSP, Servlets e JSTL   Filtrando</a>
 
+- Console.java
+```java
+@NamedQueries({
+    @NamedQuery(name = "Console.findAll", query = "SELECT c FROM Console c"),
+    @NamedQuery(name = "Console.findFilter", 
+            query = "SELECT c FROM Console c WHERE c.nome LIKE :filtro")
+})
+```
+
+- GenercDAO.java
+
+```java
+//Filtro
+   public List<T> listar(String filtro) throws Exception{
+        return em.createNamedQuery(persistedClass.getSimpleName()+".findFilter").setParameter("filtro","%" + filtro + "%").getResultList();
+    }
+```
+
+- index.jsp
+
+```jsp
+    <form action="ConsoleCtl" method="get">
+            <input type="hidden" name="action" value="list" />
+```
+
+```java
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String acao = request.getParameter("action");
+        ConsoleDAO dao;
+        
+        String pagina = "index.jsp";
+        switch(acao){
+            case "list":
+                dao = new ConsoleDAO();
+                List<Console> lista;
+                if(request.getParameter("txtFiltro") == null){
+                     lista = dao.listar();
+                }else{
+                    String filtro = request.getParameter("txtFiltro");
+                    try {
+                        lista = dao.listar(filtro);
+                    } catch (Exception e) {
+                        lista = dao.listar();
+                    }
+                }
+                request.setAttribute("lista", lista);
+                dao.fecharEmf();
+                pagina = "index.jsp";
+                break;
+            case "del":
+                dao = new ConsoleDAO();
+                String id= request.getParameter("id");
+                Boolean deuCerto = dao.excluir(Integer.parseInt(id));
+                String msgE;
+                if(deuCerto){
+                    msgE = "<script>alert('Registro excluído');</script>";
+                }else{
+                    msgE = "<script>alert('Objeto Não pode ser Excluído, Verifique Dependências!');</script>";
+                }
+                List<Console> listaE = dao.listar();
+                request.setAttribute("lista", listaE);
+                request.setAttribute("msgE", msgE);
+                dao.fecharEmf();
+                pagina = "index.jsp";
+                break;
+            case "updade":
+                dao = new ConsoleDAO();
+                String idUpdate= request.getParameter("id");
+                
+                // busco o reguistro que eu quero exibir
+                Console obj = dao.buscarPorChavePrimaria(Integer.parseInt(idUpdate));
+                
+                request.setAttribute("obj", obj);
+                
+                pagina = "upd.jsp";
+                break;
+            case "filtro":
+                
+        }
+        RequestDispatcher destino = request.getRequestDispatcher(pagina); 
+        destino.forward(request, response);
+    }
+```
 
 [Voltar ao Índice](#indice)
 

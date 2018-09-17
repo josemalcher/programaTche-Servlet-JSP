@@ -113,6 +113,7 @@ public abstract class GenericDAO<T, I extends Serializable> {
       return em.createNamedQuery(persistedClass.getSimpleName()+".findAll").getResultList();
    }
    
+   //Filtro
    public List<T> listar(String filtro) throws Exception{
         return em.createNamedQuery(persistedClass.getSimpleName()+".findFilter").setParameter("filtro","%" + filtro + "%").getResultList();
     }

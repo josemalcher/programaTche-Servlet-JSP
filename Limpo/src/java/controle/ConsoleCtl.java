@@ -43,7 +43,17 @@ public class ConsoleCtl extends HttpServlet {
         switch(acao){
             case "list":
                 dao = new ConsoleDAO();
-                List<Console> lista = dao.listar();
+                List<Console> lista;
+                if(request.getParameter("txtFiltro") == null){
+                     lista = dao.listar();
+                }else{
+                    String filtro = request.getParameter("txtFiltro");
+                    try {
+                        lista = dao.listar(filtro);
+                    } catch (Exception e) {
+                        lista = dao.listar();
+                    }
+                }
                 request.setAttribute("lista", lista);
                 dao.fecharEmf();
                 pagina = "index.jsp";
@@ -75,6 +85,8 @@ public class ConsoleCtl extends HttpServlet {
                 
                 pagina = "upd.jsp";
                 break;
+            case "filtro":
+                
         }
         RequestDispatcher destino = request.getRequestDispatcher(pagina); 
         destino.forward(request, response);

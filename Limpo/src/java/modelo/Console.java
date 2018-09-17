@@ -27,7 +27,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "console")
 @NamedQueries({
-    @NamedQuery(name = "Console.findAll", query = "SELECT c FROM Console c")})
+    @NamedQuery(name = "Console.findAll", query = "SELECT c FROM Console c"),
+    @NamedQuery(name = "Console.findFilter", 
+            query = "SELECT c FROM Console c WHERE c.nome LIKE :filtro")
+})
 public class Console implements Serializable {
 
     private static final long serialVersionUID = 1L;

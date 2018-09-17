@@ -34,7 +34,8 @@
 <!-- /.row -->
 <div class="row">
     <div class="panel panel-default">
-        <form action="#" method="post">
+        <form action="ConsoleCtl" method="get">
+            <input type="hidden" name="action" value="list" />
             <div class="form-group input-group">
                 <input type="text" class="form-control" name="txtFiltro" placeholder="digite...">
                                 <span class="input-group-btn"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></span>
